@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="info" strict="true" verbose="false"
+	monitorInterval="10">
+
+	<Properties>
+		<Property name="logPath">C:\var\log\cestel\</Property>
+		<Property name="appName">migracionPost2Maria\</Property>
+	</Properties>
+
+	<Appenders>
+
+		<Appender type="Console" name="STDOUT">
+			<Layout type="PatternLayout"
+				pattern="%highlight{%date{HH:mm:ss.SSS} [%t] %X{user}@%X{addr} %-5level %logger{1.} - %message%n}" />
+		</Appender>
+
+		<Appender type="RollingFile" name="TRACES"
+			fileName="${logPath}/${appName}migracionPost2Maria.log"
+			filePattern="${logPath}/${appName}.%d{yyyy-MM-dd}.log"
+			>
+			<Layout type="PatternLayout"
+				pattern="%highlight{%date [%t] %X{user}@%X{addr} %-5level %logger{1.} - %message%n}" />
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+			</Policies>
+			<Strategy type="DefaultRolloverStrategy">
+				<Delete basePath="${logPath}" maxDepth="1">
+					<IfFileName glob="${appName}*.log*">
+						<IfAny>
+							<IfAccumulatedFileCount exceeds="100" />
+							<IfLastModified age="100d" />
+						</IfAny>
+					</IfFileName>
+				</Delete>
+			</Strategy>
+		</Appender>
+	</Appenders>
+
+	<Loggers>
+		<Root level="INFO">
+			<AppenderRef ref="STDOUT" />
+			<AppenderRef ref="TRACES" />
+
+		</Root>
+		<Logger name="cestel" level="INFO" additivity="true">
+			<AppenderRef ref="TRACES" />
+		</Logger>
+
+
+	</Loggers>
+
+</configuration>
+
